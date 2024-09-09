@@ -6,16 +6,14 @@ import 'package:http/http.dart';
 import '../model/combine.dart';
 
 class CombineService {
-  String uri = "${UriConst.uri}combine";
-
   Future<Combine?> getCombinedResult(int enemyId, int raceId) async {
     try {
+      var responseUrl = Uri.http(UriConst.uri, "/combine/$enemyId/$raceId");
       // make the request
-      Uri ur = Uri.parse("$uri/$enemyId/$raceId");
-      Response response = await get(ur);
-      print(response.body);
+      Response response = await get(responseUrl);
+      //  print(response.body);
       Combine instance = Combine.fromJson(jsonDecode(response.body));
-
+      print(response.body);
       return instance;
     } catch (e) {
       print("Combine service failed: $e");
@@ -34,63 +32,41 @@ class CombineService {
       bool withoutDefaultTraits) async {
     try {
       // make the request
-      String url = "$uri/$enemyId/$raceId";
-      String searcher = "";
 
+      Map<String, String> queryParams = {};
+      var searcher = "";
       if (traits?.isNotEmpty == true) {
-        searcher = "/extra?traits=$traits";
+        queryParams["traits"] = traits!;
       }
 
       if (actions?.isNotEmpty == true) {
-        if (searcher.isEmpty) {
-          searcher = "/extra?";
-        } else {
-          searcher += "&";
-        }
-        searcher += "actions=$actions";
+        queryParams["actions"] = actions!;
       }
 
       if (reactions?.isNotEmpty == true) {
-        if (searcher.isEmpty) {
-          searcher = "/extra?";
-        } else {
-          searcher += "&";
-        }
-        searcher += "reactions=$reactions";
+        queryParams["reactions"] = reactions!;
       }
 
       if (withoutDefaultActions) {
-        if (searcher.isEmpty) {
-          searcher = "/extra?";
-        } else {
-          searcher += "&";
-        }
-        searcher += "noDefaultActions=true";
+        queryParams["noDefaultActions"] = "true";
       }
 
       if (withoutDefaultReactions) {
-        if (searcher.isEmpty) {
-          searcher = "/extra?";
-        } else {
-          searcher += "&";
-        }
+        queryParams["noDefaultReactions"] = "true";
         searcher += "noDefaultReactions=true";
       }
 
       if (withoutDefaultTraits) {
-        if (searcher.isEmpty) {
-          searcher = "/extra?";
-        } else {
-          searcher += "&";
-        }
-        searcher += "noDefaultTraits=true";
+        queryParams["noDefaultTraits"] = "true";
       }
 
-      Uri ur = Uri.parse("$url$searcher");
+      var responseUrl = Uri.http(UriConst.uri, "/combine/$enemyId/$raceId/");
+      if (queryParams.isNotEmpty) {
+        responseUrl = Uri.http(UriConst.uri, "/combine/$enemyId/$raceId/extra",
+             queryParams);
+      }
 
-      print(ur);
-
-      Response response = await get(ur);
+      Response response = await get(responseUrl);
       print(response.body);
       Combine instance = Combine.fromJson(jsonDecode(response.body));
 

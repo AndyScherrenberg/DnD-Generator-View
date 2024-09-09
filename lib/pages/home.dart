@@ -1,3 +1,11 @@
+import 'package:dndshower/pages/action_overview.dart';
+import 'package:dndshower/pages/combiner/combiner.dart';
+import 'package:dndshower/pages/enemy_overview.dart';
+import 'package:dndshower/pages/race_overview.dart';
+import 'package:dndshower/pages/racetype_overview.dart';
+import 'package:dndshower/pages/trait_overview.dart';
+import 'package:dndshower/widgets/main_container.dart';
+import 'package:dndshower/widgets/default/spacer.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -5,47 +13,63 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+class CustomPageRoute extends MaterialPageRoute {
+  CustomPageRoute({builder}) : super(builder: builder);
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 0);
+}
+
 class _HomeState extends State<Home> {
+  void pusher(StatefulWidget page) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => page,
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
+    );
+  }
+
   void onEnemyButton() {
-    Navigator.pushNamed(context, '/enemy');
+    pusher(ChooseEnemy(false));
   }
 
   void onRaceButton() {
-    Navigator.pushNamed(context, '/race');
+    pusher(ChooseRace(false));
   }
 
   void onRaceTypeButton() {
-    Navigator.pushNamed(context, '/racetype');
+    pusher(ChooseRaceType());
   }
 
   void onCombiner() {
-    Navigator.pushNamed(context, '/combine');
+    pusher(Combiner());
   }
 
   void onTraits() {
-    Navigator.pushNamed(context, '/traits');
+
+
+    pusher(TraitOverview(""));
   }
 
   void onActions() {
-    Navigator.pushNamed(context, '/actions');
+    pusher(ActionOverview("", true));
   }
 
   void onReactions() {
-    Navigator.pushNamed(context, '/reactions');
+    pusher(ActionOverview("", false));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('D&D'),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: SafeArea(
+    return MainContainer(
+        title: 'Dungeon and Dragons stats generator',
+        widget: SafeArea(
             child: Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                 child: Column(
                   children: [
                     TextButton(
@@ -76,7 +100,7 @@ class _HomeState extends State<Home> {
                       onPressed: onCombiner,
                       child: Text("Combine"),
                     )
-                  ],
+                  ].withSpaceBetween(height: 10),
                 ))));
   }
 }

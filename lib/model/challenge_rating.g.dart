@@ -8,9 +8,9 @@ part of 'challenge_rating.dart';
 
 ChallengeRating _$ChallengeRatingFromJson(Map<String, dynamic> json) =>
     ChallengeRating(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['rating'] as String,
-      json['xp'] as int,
+      (json['xp'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ChallengeRatingToJson(ChallengeRating instance) =>

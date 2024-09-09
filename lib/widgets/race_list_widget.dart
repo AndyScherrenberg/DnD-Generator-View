@@ -6,22 +6,30 @@ import '../model/race.dart';
 class RaceListItem extends StatelessWidget {
   final Race race;
   final Function onClick;
+  final int index;
 
-  const RaceListItem({super.key, required this.race, required this.onClick});
+  const RaceListItem({super.key, required this.race, required this.onClick, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 4.0),
-      child: Card(
-        child: ListTile(
-          onTap: () {
-            onClick();
-          },
-          title: Text(race.name),
-          leading: CircleAvatar(),
-        ),
-      ),
-    );
+    var assetToLoad = (index.isEven)
+        ? "assets/images/list-item-background-a.png"
+        : "assets/images/list-item-background-b.png";
+    return Card(
+        elevation: 0,
+        color: Colors.transparent,
+        child: Column(children: [
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(assetToLoad), fit: BoxFit.fill)),
+            child: ListTile(
+              onTap: () {
+                onClick();
+              },
+              title: Text(race.name),
+            ),
+          ),
+        ]));
   }
 }

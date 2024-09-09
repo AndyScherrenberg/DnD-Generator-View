@@ -7,8 +7,8 @@ part of 'stat.dart';
 // **************************************************************************
 
 Stat _$StatFromJson(Map<String, dynamic> json) => Stat(
-      json['baseStat'] as int,
-      json['modifier'] as int,
+      (json['baseStat'] as num).toInt(),
+      (json['modifier'] as num).toInt(),
     );
 
 Map<String, dynamic> _$StatToJson(Stat instance) => <String, dynamic>{

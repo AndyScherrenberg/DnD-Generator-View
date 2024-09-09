@@ -1,3 +1,3 @@
 class UriConst {
-  static const uri = "change to host";
+  static const uri = "localhost:8080";
 }

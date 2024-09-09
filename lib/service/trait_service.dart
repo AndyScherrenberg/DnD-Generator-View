@@ -11,8 +11,11 @@ class TraitService {
   Future<List<Trait>> getTraits() async {
     try {
       // make the request
-      Uri ur = Uri.parse(uri);
-      Response response = await get(ur);
+      var responseUrl = Uri.http(
+        UriConst.uri,
+        "traits",
+      );
+      Response response = await get(responseUrl);
       print(response.toString());
       List jsonResponse = json.decode(response.body);
       //  print(jsonResponse.toString());

@@ -50,7 +50,9 @@ class FutureRaceList extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return RaceListItem(
                       race: data[index],
-                      onClick: () => onRaceClicked(data[index]));
+                      onClick: () => onRaceClicked(data[index]),
+                      index: index
+                  );
                 });
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");

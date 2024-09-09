@@ -7,7 +7,7 @@ part of 'modifier.dart';
 // **************************************************************************
 
 Modifier _$ModifierFromJson(Map<String, dynamic> json) => Modifier(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['modifier'] as String,
     );
 

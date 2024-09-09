@@ -7,13 +7,13 @@ part of 'action.dart';
 // **************************************************************************
 
 Action _$ActionFromJson(Map<String, dynamic> json) => Action(
-      json['id'] as int?,
+      (json['id'] as num?)?.toInt(),
       json['name'] as String,
       json['reach'] as String?,
       json['target'] as String?,
       json['hitDice'] as String?,
-      json['toHit'] as int?,
-      json['hitBonus'] as int?,
+      (json['toHit'] as num?)?.toInt(),
+      (json['hitBonus'] as num?)?.toInt(),
       ActionType.fromJson(json['actionType'] as Map<String, dynamic>),
       json['damageType'] == null
           ? null

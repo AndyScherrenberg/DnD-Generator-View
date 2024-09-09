@@ -6,19 +6,18 @@ import 'package:http/http.dart';
 import '../model/race.dart';
 
 class RaceService {
-  String uri = "${UriConst.uri}races";
-
   Future<Race?> getEnemy(int id) async {
     try {
-      // make the request
-      Uri ur = Uri.parse("$uri/$id");
-      Response response = await get(ur);
+      var responseUrl = Uri.http(
+        UriConst.uri,
+        "races/$id",
+      );
+      Response response = await get(responseUrl);
+
       Race instance = Race.fromJson(jsonDecode(response.body));
       return instance;
     } catch (e) {
-      print("ERROR HAS BEEN FOUND");
-
-      print(e);
+      print("An error has occured when parsing the race data: $e");
     }
     return null;
   }
@@ -26,18 +25,15 @@ class RaceService {
   Future<List<Race>> getEnemies() async {
     try {
       // make the request
-      Uri ur = Uri.parse(uri);
-      Response response = await get(ur);
-      print(response.toString());
+      var responseUrl = Uri.http(
+        UriConst.uri,
+        "races",
+      );
+      Response response = await get(responseUrl);
       List jsonResponse = json.decode(response.body);
-      //  print(jsonResponse.toString());
       return jsonResponse.map((data) => Race.fromJson(data)).toList();
-      //
-      //  return List.empty();
     } catch (e) {
-      print("ERROR HAS BEEN FOUND");
-
-      print(e);
+      print("An error has occured when parsing the race list data: $e");
     }
 
     return [];

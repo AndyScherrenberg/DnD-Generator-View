@@ -1,4 +1,5 @@
 import 'package:dndshower/model/stat.dart';
+import 'package:dndshower/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +20,8 @@ class StatWidget extends StatelessWidget {
 
     return Column(
       children: [
-        Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Text("${stat.baseStat} ($modifiedData)")
+        Text(name, style: statBookTextStyle(Theme.of(context).textTheme).titleSmall),
+        Text("${stat.baseStat} ($modifiedData)", style: statBookTextStyle(Theme.of(context).textTheme).bodyMedium)
       ],
     );
   }

@@ -11,13 +11,15 @@ class FutureEnemyList extends StatelessWidget {
   final String searchQuery;
 
   final bool shrinkWrapping;
+  final int? selectedIndex;
 
   const FutureEnemyList(
       {super.key,
       required this.futureData,
       required this.onEnemyClicked,
       this.shrinkWrapping = false,
-      required this.searchQuery});
+      required this.searchQuery,
+      this.selectedIndex});
 
   List<Enemy> resultList(List<Enemy>? data) {
     if (data == null) {
@@ -51,8 +53,14 @@ class FutureEnemyList extends StatelessWidget {
                 itemCount: results.length,
                 itemBuilder: (BuildContext context, int index) {
                   return EnemyListItem(
-                      enemy: results[index],
-                      onClick: () => onEnemyClicked(results[index]));
+                    enemy: results[index],
+                    index: index,
+                    onClick: () => onEnemyClicked(results[index], index),
+                    isSelected: (selectedIndex != null &&
+                            results[index] == results[selectedIndex!])
+                        ? true
+                        : false,
+                  );
                 });
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");

@@ -7,9 +7,9 @@ part of 'saving_throw.dart';
 // **************************************************************************
 
 SavingThrow _$SavingThrowFromJson(Map<String, dynamic> json) => SavingThrow(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['name'] as String,
-      json['value'] as int,
+      (json['value'] as num).toInt(),
     );
 
 Map<String, dynamic> _$SavingThrowToJson(SavingThrow instance) =>

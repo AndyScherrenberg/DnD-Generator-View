@@ -42,6 +42,8 @@ class FutureActionList extends StatelessWidget {
     return results;
   }
 
+  //Update Styling
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dnd_action.Action>>(
@@ -60,20 +62,39 @@ class FutureActionList extends StatelessWidget {
                     action.isSelected = true;
                   }
 
-                  Color color = ColorData.mediumYellow;
+                  Color color = Colors.transparent;
                   if (action.isSelected) {
-                    color = Colors.red;
+                    color = ColorData.statBlockRedBackground;
                   }
 
+                  var assetToLoad = (index.isEven)
+                      ? "assets/images/list-item-background-a.png"
+                      : "assets/images/list-item-background-b.png";
                   return Card(
-                    child: ListTile(
-                      onTap: () {
-                        onActionClicked(action);
-                      },
-                      title: CalculatedActionListItem(calculatedAction: action),
-                    ),
-                    color: color,
-                  );
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: color,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: Column(children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  colorFilter:
+                                      ColorFilter.mode(color, BlendMode.color),
+                                  image: AssetImage(assetToLoad),
+                                  fit: BoxFit.fill)),
+                          child: ListTile(
+                            onTap: () {
+                              onActionClicked(action);
+                            },
+                            title: CalculatedActionListItem(
+                                calculatedAction: action),
+                          ),
+                        ),
+                      ]));
                 });
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");

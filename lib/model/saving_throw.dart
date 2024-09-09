@@ -10,6 +10,10 @@ class SavingThrow {
 
   SavingThrow(this.id, this.name, this.value);
 
+  String asString(){
+    return "$name +$value";
+  }
+
   factory SavingThrow.fromJson(Map<String, dynamic> json) =>
       _$SavingThrowFromJson(json);
 }

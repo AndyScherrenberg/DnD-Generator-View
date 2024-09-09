@@ -1,6 +1,7 @@
 import 'package:dndshower/lists/future_action_list.dart';
 import 'package:dndshower/model/action.dart' as dnd_action;
 import 'package:dndshower/service/action_service.dart';
+import 'package:dndshower/widgets/main_container.dart';
 import 'package:flutter/material.dart';
 
 class ActionOverview extends StatefulWidget {
@@ -81,42 +82,35 @@ class _ActionOverview extends State<ActionOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('Action overview'),
-              centerTitle: true,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => onCloseScreen(),
+    return MainContainer(
+      title: 'Action overview',
+      widget: WillPopScope(
+          onWillPop: () async => false,
+          child: (Column(children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
+                controller: editingController,
+                decoration: const InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
               ),
             ),
-            body: Column(children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  onChanged: (value) {
-                    filterSearchResults(value);
-                  },
-                  controller: editingController,
-                  decoration: const InputDecoration(
-                      labelText: "Search",
-                      hintText: "Search",
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(25.0)))),
-                ),
-              ),
-              Expanded(
-                  child: FutureActionList(
-                      futureData: getFutureData(),
-                      shrinkWrapping: true,
-                      onActionClicked: onActionClicked,
-                      preFilled: actionIds,
-                      searchQuery: searchQuery)),
-            ])));
+            Expanded(
+                child: FutureActionList(
+                    futureData: getFutureData(),
+                    shrinkWrapping: true,
+                    onActionClicked: onActionClicked,
+                    preFilled: actionIds,
+                    searchQuery: searchQuery)),
+          ]))),
+      onCloseScreen: onCloseScreen,
+    );
   }
 }

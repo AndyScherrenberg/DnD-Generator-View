@@ -7,7 +7,7 @@ part of 'race_type.dart';
 // **************************************************************************
 
 RaceType _$RaceTypeFromJson(Map<String, dynamic> json) => RaceType(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['name'] as String,
     );
 

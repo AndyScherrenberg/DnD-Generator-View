@@ -17,7 +17,7 @@ class CalculatedActionListItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
         child: RichText(
             text: TextSpan(
-          style: customLightTheme().textTheme.bodyText1,
+          style: customLightTheme().textTheme.bodyMedium,
           children: <TextSpan>[
             TextSpan(
                 text: '${calculatedAction.name}.',
@@ -25,7 +25,7 @@ class CalculatedActionListItem extends StatelessWidget {
             TextSpan(
                 text: ' ${calculatedAction.actionType.name}:',
                 style: const TextStyle(fontStyle: FontStyle.italic)),
-            TextSpan(text: ' ${calculatedAction.toHit ?? "##"} to hit, '),
+            TextSpan(text: ' +${calculatedAction.toHit ?? "##"} to hit, '),
             TextSpan(
                 text:
                     " reach/range ${calculatedAction.reach}., ${calculatedAction.target} target(s). "),
@@ -42,7 +42,7 @@ class CalculatedActionListItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
           child: RichText(
               text: TextSpan(
-                  style: customLightTheme().textTheme.bodyText1,
+                  style: customLightTheme().textTheme.bodyMedium,
                   children: <TextSpan>[
                 TextSpan(
                     text: '${calculatedAction.name}.',

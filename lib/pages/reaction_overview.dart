@@ -1,6 +1,7 @@
 import 'package:dndshower/lists/future_action_list.dart';
 import 'package:dndshower/model/action.dart' as dnd_action;
 import 'package:dndshower/service/action_service.dart';
+import 'package:dndshower/widgets/main_container.dart';
 import 'package:flutter/material.dart';
 
 class ReactionOverview extends StatefulWidget {
@@ -21,13 +22,7 @@ class _ReactionOverview extends State<ReactionOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Reaction overview'),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: Column(children: [
+    return MainContainer(title: "Reaction overview", widget: Column(children: [
           ConstrainedBox(
               constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.6),

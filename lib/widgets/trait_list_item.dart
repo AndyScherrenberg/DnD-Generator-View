@@ -14,7 +14,7 @@ class TraitListItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
         child: RichText(
             text: TextSpan(
-                style: customLightTheme().textTheme.bodyText1,
+                style: customLightTheme().textTheme.bodyMedium,
                 children: <TextSpan>[
               TextSpan(
                   text: '${trait.name}.',

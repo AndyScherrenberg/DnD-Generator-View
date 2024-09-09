@@ -10,8 +10,11 @@ class RaceTypeService {
   Future<RaceType?> getRaceType(int id) async {
     try {
       // make the request
-      Uri ur = Uri.parse("$uri/$id");
-      Response response = await get(ur);
+      var responseUrl = Uri.http(
+        UriConst.uri,
+        "racetypes/$id",
+      );
+      Response response = await get(responseUrl);
       RaceType instance = RaceType.fromJson(jsonDecode(response.body));
 
       instance.isHumanoid = (instance.name == "Humanoid");
@@ -27,8 +30,11 @@ class RaceTypeService {
   Future<List<RaceType>> getRaceTypes() async {
     try {
       // make the request
-      Uri ur = Uri.parse(uri);
-      Response response = await get(ur);
+      var responseUrl = Uri.http(
+        UriConst.uri,
+        "racetypes",
+      );
+      Response response = await get(responseUrl);
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => RaceType.fromJson(data)).toList();
     } catch (e) {

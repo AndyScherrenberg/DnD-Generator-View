@@ -12,4 +12,8 @@ class ChallengeRating {
 
   factory ChallengeRating.fromJson(Map<String, dynamic> json) =>
       _$ChallengeRatingFromJson(json);
+
+  String? asString(){
+    return "$rating ($xp)";
+  }
 }

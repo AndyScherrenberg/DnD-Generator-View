@@ -7,7 +7,7 @@ part of 'size.dart';
 // **************************************************************************
 
 Size _$SizeFromJson(Map<String, dynamic> json) => Size(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['size'] as String,
     );
 

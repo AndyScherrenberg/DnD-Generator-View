@@ -10,9 +10,14 @@ class ActionService {
 
   Future<List<Action>> getActions() async {
     try {
+
+      var responseUrl = Uri.http(
+        UriConst.uri,
+        "actions",
+      );
       // make the request
-      Uri ur = Uri.parse(uri);
-      Response response = await get(ur);
+
+      Response response = await get(responseUrl);
       print(response.toString());
       List jsonResponse = json.decode(response.body);
       //  print(jsonResponse.toString());
@@ -29,8 +34,11 @@ class ActionService {
   Future<List<Action>> getReactions() async {
     try {
       // make the request
-      Uri ur = Uri.parse(reactionUri);
-      Response response = await get(ur);
+      var responseUrl = Uri.http(
+        UriConst.uri,
+        "reactions",
+      );
+      Response response = await get(responseUrl);
       print(response.body.toString());
       List jsonResponse = json.decode(response.body);
       //  print(jsonResponse.toString());

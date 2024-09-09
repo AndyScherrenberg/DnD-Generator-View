@@ -15,7 +15,7 @@ class TitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
         text: TextSpan(
-            style: customLightTheme().textTheme.bodyText1,
+            style: customLightTheme().textTheme.bodyMedium,
             children: <TextSpan>[
           TextSpan(text: title, style: boldStyle),
           TextSpan(text: ' $value'),

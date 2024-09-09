@@ -63,16 +63,15 @@ class FutureTraitList extends StatelessWidget {
                     trait.isSelected = true;
                   }
 
-                  Color color = ColorData.mediumYellow;
+                  Color color = Colors.transparent;
                   if (trait.isSelected) {
-                    color = Colors.red;
+                    color = ColorData.statBlockRedBackground;
                   }
 
-                  return Card(
-                      color: color,
-                      child: ListTile(
-                          onTap: () => onTraitClicked(trait),
-                          title: TraitListItem(trait: trait)));
+                  var assetToLoad = (index.isEven)
+                      ? "assets/images/list-item-background-a.png"
+                      : "assets/images/list-item-background-b.png";
+                  return makeTraitCard(color, assetToLoad, trait);
                 });
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
@@ -80,5 +79,31 @@ class FutureTraitList extends StatelessWidget {
           // By default show a loading spinner.
           return const CircularProgressIndicator();
         });
+  }
+
+  Card makeTraitCard(Color color, String assetToLoad, Trait trait) {
+    return Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: color,
+              width: 2.0,
+            ),
+            borderRadius: BorderRadius.circular(8.0)),
+        child: Column(children: [
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    colorFilter: ColorFilter.mode(color, BlendMode.color),
+                    image: AssetImage(assetToLoad),
+                    fit: BoxFit.fill)),
+            child: ListTile(
+              onTap: () {
+                onTraitClicked(trait);
+              },
+              title: TraitListItem(trait: trait),
+            ),
+          ),
+        ]));
   }
 }

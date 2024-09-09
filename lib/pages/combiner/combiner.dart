@@ -2,11 +2,17 @@ import 'package:dndshower/model/combine.dart';
 import 'package:dndshower/model/enemy.dart';
 import 'package:dndshower/model/race.dart';
 import 'package:dndshower/pages/action_overview.dart';
+import 'package:dndshower/pages/enemy_overview.dart';
+import 'package:dndshower/pages/race_overview.dart';
 import 'package:dndshower/pages/trait_overview.dart';
 import 'package:dndshower/service/combine_service.dart';
 import 'package:dndshower/theme.dart';
 import 'package:dndshower/widgets/combine_details.dart';
+import 'package:dndshower/widgets/default/spacer.dart';
 import 'package:flutter/material.dart';
+
+import '../../widgets/default/default_divider.dart';
+import '../../widgets/main_container.dart';
 
 class Combiner extends StatefulWidget {
   @override
@@ -14,6 +20,17 @@ class Combiner extends StatefulWidget {
 }
 
 class _CombinerState extends State<Combiner> {
+  Future<dynamic> pusher(StatefulWidget page) {
+    return Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => page,
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
+    );
+  }
+
   Enemy? enemy;
   Race? race;
   Combine? combine;
@@ -26,11 +43,13 @@ class _CombinerState extends State<Combiner> {
   bool withoutDefaultReactions = false;
   bool withoutDefaultTraits = false;
 
+  bool showExtra = false;
+
   CombineService combineService = CombineService();
 
   void onEnemyPressed() async {
     Enemy? currentEnemy = enemy;
-    dynamic result = await Navigator.pushNamed(context, '/combine/enemy');
+    dynamic result = await pusher(ChooseEnemy(true));
     if (result != null) {
       setState(() {
         enemy = result['enemy'];
@@ -41,9 +60,14 @@ class _CombinerState extends State<Combiner> {
     }
   }
 
+  void onExtraPressed() async {
+    showExtra = !showExtra;
+    setState(() {});
+  }
+
   void onRacePressed() async {
     Race? currentRace = race;
-    dynamic result = await Navigator.pushNamed(context, '/combine/race');
+    dynamic result = await pusher(ChooseRace(true));
     if (result != null) {
       setState(() {
         race = result['race'];
@@ -55,56 +79,33 @@ class _CombinerState extends State<Combiner> {
   }
 
   void onActionsPressed() async {
-    String? currentActions = actions;
-
-    dynamic result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ActionOverview(actions ?? "", true)));
+    dynamic result = await pusher(ActionOverview(actions ?? "", true));
     if (result != null) {
       actions = result["actions"];
     } else {
       actions = null;
     }
-    setState(() {
-      if (currentActions != actions) {
-        onCombinePressed();
-      }
-    });
+    setState(() {});
   }
 
   void onTraitsPressed() async {
-    String? currentTraits = traits;
-    dynamic result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => TraitOverview(traits ?? "")));
+    dynamic result = await pusher(TraitOverview(traits ?? ""));
     if (result != null) {
       traits = result["traits"];
     } else {
       traits = null;
     }
-    setState(() {
-      if (currentTraits != traits) {
-        onCombinePressed();
-      }
-    });
+    setState(() {});
   }
 
   void onReactionsPressed() async {
-    String? currentReactions = reactions;
-    dynamic result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ActionOverview(reactions ?? "", false)));
+    dynamic result = await pusher(ActionOverview(reactions ?? "", false));
     if (result != null) {
       reactions = result["reactions"];
     } else {
       reactions = null;
     }
-    setState(() {
-      if (currentReactions != reactions) {
-        onCombinePressed();
-      }
-    });
+    setState(() {});
   }
 
   Future<void> onCombinePressed() async {
@@ -131,103 +132,128 @@ class _CombinerState extends State<Combiner> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Combine 2 options'),
-          centerTitle: true,
-          elevation: 0,
+    return MainContainer(
+        title: "Combiner",
+        widget: ListView(shrinkWrap: true, children: [
+          Container(
+            child: Column(
+              children: [
+                headerButtons(),
+                DefaultDivider(),
+                createExtraOptionsRow(),
+                combine != null
+                    ? CombineDetails(combine: combine!)
+                    : Container()
+              ],
+            ),
+          )
+        ]));
+  }
+
+  Row headerButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        OutlinedButton(
+          onPressed: onEnemyPressed,
+          style: OutlinedButton.styleFrom(
+              backgroundColor: enemy != null
+                  ? ColorData.statBlockRedText
+                  : ColorData.mainButtonColorDark),
+          child: Text(enemy?.name ?? "Enemy"),
         ),
-        body: Container(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton(
-                    onPressed: onEnemyPressed,
-                    style: OutlinedButton.styleFrom(
-                        backgroundColor: enemy != null
-                            ? Colors.red
-                            : ColorData.mediumYellow),
-                    child: Text(enemy?.name ?? "Enemy"),
-                  ),
-                  OutlinedButton(
-                    onPressed: onRacePressed,
-                    style: OutlinedButton.styleFrom(
-                        backgroundColor:
-                            race != null ? Colors.red : ColorData.mediumYellow),
-                    child: Text(race?.name ?? "Race"),
-                  ),
-                ],
+        OutlinedButton(
+          onPressed: onRacePressed,
+          style: OutlinedButton.styleFrom(
+              backgroundColor: race != null
+                  ? ColorData.statBlockRedText
+                  : ColorData.mainButtonColorDark),
+          child: Text(race?.name ?? "Race"),
+        ),
+        OutlinedButton(
+          onPressed: onExtraPressed,
+          style: OutlinedButton.styleFrom(
+              backgroundColor: showExtra
+                  ? ColorData.statBlockRedText
+                  : ColorData.mainButtonColorDark),
+          child: Text(showExtra ? "Hide Options" : "Show Options"),
+        ),
+      ],
+    );
+  }
+
+  Widget createExtraOptionsRow() {
+    if (showExtra) {
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              OutlinedButton(
+                onPressed: onActionsPressed,
+                style: OutlinedButton.styleFrom(
+                    backgroundColor: actions?.isNotEmpty == true
+                        ? ColorData.statBlockRedText
+                        : ColorData.mainButtonColorDark),
+                child: Text("Actions"),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(children: [
-                    OutlinedButton(
-                      onPressed: onActionsPressed,
-                      style: OutlinedButton.styleFrom(
-                          backgroundColor: actions?.isNotEmpty == true
-                              ? Colors.red
-                              : ColorData.mediumYellow),
-                      child: Text("Actions"),
-                    ),
-                    Text("No defaultActions"),
-                    Checkbox(
-                      onChanged: (value) {
-                        withoutDefaultActions = !withoutDefaultActions;
-                        setState(() {
-                          onCombinePressed();
-                        });
-                      },
-                      value: withoutDefaultActions,
-                    )
-                  ]),
-                  Column(children: [
-                    OutlinedButton(
-                      onPressed: onReactionsPressed,
-                      style: OutlinedButton.styleFrom(
-                          backgroundColor: reactions?.isNotEmpty == true
-                              ? Colors.red
-                              : ColorData.mediumYellow),
-                      child: Text("Reactions"),
-                    ),
-                    Text("No default Reactions"),
-                    Checkbox(
-                      onChanged: (value) {
-                        withoutDefaultReactions = !withoutDefaultReactions;
-                        setState(() {
-                          onCombinePressed();
-                        });
-                      },
-                      value: withoutDefaultReactions,
-                    )
-                  ]),
-                  Column(children: [
-                    OutlinedButton(
-                      onPressed: onTraitsPressed,
-                      style: OutlinedButton.styleFrom(
-                          backgroundColor: traits?.isNotEmpty == true
-                              ? Colors.red
-                              : ColorData.mediumYellow),
-                      child: Text("Traits"),
-                    ),
-                    Text("No default Traits"),
-                    Checkbox(
-                      onChanged: (value) {
-                        withoutDefaultTraits = !withoutDefaultTraits;
-                        setState(() {
-                          onCombinePressed();
-                        });
-                      },
-                      value: withoutDefaultTraits,
-                    )
-                  ])
-                ],
+              Text("No defaultActions"),
+              Checkbox(
+                onChanged: (value) {
+                  withoutDefaultActions = !withoutDefaultActions;
+                  setState(() {});
+                },
+                value: withoutDefaultActions,
+              )
+            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              OutlinedButton(
+                onPressed: onReactionsPressed,
+                style: OutlinedButton.styleFrom(
+                    backgroundColor: reactions?.isNotEmpty == true
+                        ? ColorData.statBlockRedText
+                        : ColorData.mainButtonColorDark),
+                child: Text("Reactions"),
               ),
-              combine != null ? CombineDetails(combine: combine!) : Container()
-            ],
-          ),
-        ));
+              Text("No default Reactions"),
+              Checkbox(
+                onChanged: (value) {
+                  withoutDefaultReactions = !withoutDefaultReactions;
+                  setState(() {});
+                },
+                value: withoutDefaultReactions,
+              )
+            ]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OutlinedButton(
+                  onPressed: onTraitsPressed,
+                  style: OutlinedButton.styleFrom(
+                      backgroundColor: traits?.isNotEmpty == true
+                          ? ColorData.statBlockRedText
+                          : ColorData.mainButtonColorDark),
+                  child: Text("Traits"),
+                ),
+                Text("No default Traits"),
+                Checkbox(
+                  onChanged: (value) {
+                    withoutDefaultTraits = !withoutDefaultTraits;
+                    setState(() {});
+                  },
+                  value: withoutDefaultTraits,
+                )
+              ],
+            ),
+            DefaultDivider(),
+            OutlinedButton(
+                onPressed: onCombinePressed,
+                style: OutlinedButton.styleFrom(
+                    backgroundColor: ColorData.mainButtonColorDark),
+                child: Text("Create")),
+            DefaultDivider(),
+          ].withSpaceBetween(height: 10));
+    } else {
+      return Container();
+    }
   }
 }

@@ -7,7 +7,7 @@ part of 'trait.dart';
 // **************************************************************************
 
 Trait _$TraitFromJson(Map<String, dynamic> json) => Trait(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['name'] as String?,
       json['description'] as String?,
     );

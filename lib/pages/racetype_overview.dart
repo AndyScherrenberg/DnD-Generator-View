@@ -2,6 +2,7 @@ import 'package:dndshower/service/race_type_service.dart';
 import 'package:flutter/material.dart';
 
 import '../model/race_type.dart';
+import '../widgets/main_container.dart';
 import '../widgets/racetype_list_widget.dart';
 
 class ChooseRaceType extends StatefulWidget {
@@ -32,13 +33,9 @@ class _ChooseRaceTypeState extends State<ChooseRaceType> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Pick a Race'),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: Center(
+    return MainContainer(
+        title: "Pick Race Type",
+        widget: Center(
             child: FutureBuilder<List<RaceType>>(
                 future: futureData,
                 builder: (context, snapshot) {
